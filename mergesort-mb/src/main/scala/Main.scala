@@ -9,29 +9,29 @@ object MergeSort {
   
   def mergeSortFast(ary: Array[Int], comp: (Int, Int) => Boolean): Array[Int] = {
     def merge(a: Array[Int], b: Array[Int]): Array[Int] = {
-	  val res = new Array[Int](a.length + b.length)
-	  var ai = 0
-	  var bi = 0
-	  while (ai < a.length && bi < b.length) {
-	    if (comp(a(ai), b(bi))) {
-		  res(ai + bi) = a(ai)
-		  ai += 1
-	    } else {
-		  res(ai + bi) = b(bi)
-	  	  bi += 1
-	    }
-	  }
-	  while (ai < a.length) {
-	    res(ai + bi) = a(ai)
-	    ai += 1
-	  }
-	  while (bi < b.length) {
-	    res(ai + bi) = b(bi)
-	    bi += 1
-	  }
-	  res
+      val res = new Array[Int](a.length + b.length)
+      var ai = 0
+      var bi = 0
+      while (ai < a.length && bi < b.length) {
+        if (comp(a(ai), b(bi))) {
+          res(ai + bi) = a(ai)
+          ai += 1
+        } else {
+          res(ai + bi) = b(bi)
+            bi += 1
+        }
+      }
+      while (ai < a.length) {
+        res(ai + bi) = a(ai)
+        ai += 1
+      }
+      while (bi < b.length) {
+        res(ai + bi) = b(bi)
+        bi += 1
+      }
+      res
     }
-	
+    
     val len = ary.length
     if (len <= 1) ary
     else {
@@ -133,56 +133,56 @@ object MergeSort {
   
   def mergeSortMB[@miniboxed T](ary: MbArray[T], comp: (T, T) => Boolean): MbArray[T] = {
     def merge(a: MbArray[T], b: MbArray[T]): MbArray[T] = {
-	  val res = MbArray.empty[T](a.length + b.length)
-	  var ai = 0
-	  var bi = 0
-	  while (ai < a.length && bi < b.length) {
-	    if (comp(a(ai), b(bi))) {
-		  res(ai + bi) = a(ai)
-		  ai += 1
-	    } else {
-		  res(ai + bi) = b(bi)
-		  bi += 1
-	    }
-	  }
-	  while (ai < a.length) {
-		  res(ai + bi) = a(ai)
-		  ai += 1
-	  }
-	  while (bi < b.length) {
-		  res(ai + bi) = b(bi)
-		  bi += 1
-	  }
-	  res
-	}
-	val len = ary.length
+      val res = MbArray.empty[T](a.length + b.length)
+      var ai = 0
+      var bi = 0
+      while (ai < a.length && bi < b.length) {
+        if (comp(a(ai), b(bi))) {
+          res(ai + bi) = a(ai)
+          ai += 1
+        } else {
+          res(ai + bi) = b(bi)
+          bi += 1
+        }
+      }
+      while (ai < a.length) {
+          res(ai + bi) = a(ai)
+          ai += 1
+      }
+      while (bi < b.length) {
+          res(ai + bi) = b(bi)
+          bi += 1
+      }
+      res
+    }
+    val len = ary.length
     if (len <= 1) ary
-	else {
+    else {
       val mid = len / 2
-	  val a = MbArray.empty[T](mid)
-	  val b = MbArray.empty[T](len - mid)
-	  
-	  for (i <- 0 until mid) a(i) = ary(i)
-	  for (i <- mid until len) b(i - mid) = ary(i)
-	  
-	  merge(mergeSortMB(a, comp), mergeSortMB(b, comp))
-	}
+      val a = MbArray.empty[T](mid)
+      val b = MbArray.empty[T](len - mid)
+      
+      for (i <- 0 until mid) a(i) = ary(i)
+      for (i <- mid until len) b(i - mid) = ary(i)
+      
+      merge(mergeSortMB(a, comp), mergeSortMB(b, comp))
+    }
   }
   
   def randomArrayMB(len: Int) = {
-	val ary = MbArray.empty[Int](len)
-	val rnd = new Random(seed)
-	for (i <- 0 until len) {
+    val ary = MbArray.empty[Int](len)
+    val rnd = new Random(seed)
+    for (i <- 0 until len) {
       ary(i) = rnd.nextInt(len)
-	}
-	ary
+    }
+    ary
   }
   
   def main(args: Array[String]): Unit = {
-	val lens = List(500000, 1000000, 3000000)
-	
-	for (len <- lens) {
-	  println("\nWith length : " + len + "\n")
+    val lens = List(500000, 1000000, 3000000)
+    
+    for (len <- lens) {
+      println("\nWith length : " + len + "\n")
       val aryA = randomArray(len)
       val startA = System.nanoTime
       mergeSortFast(aryA, (a: Int, b: Int) => a < b)
@@ -197,11 +197,11 @@ object MergeSort {
       val startC = System.nanoTime
       mergeSortCT(aryC, (a: Int, b: Int) => a < b)
       println("Array[T: ClassTag] : " + (System.nanoTime - startC) / 1000000.0 + " milliseconds")
-	  
-	  var aryD = randomArrayMB(len)
-	  val startD = System.nanoTime
-	  mergeSortMB(aryD, (a: Int, b: Int) => a < b)
-	  println("Array[@miniboxed T] : " + (System.nanoTime - startD) / 1000000.0 + " milliseconds")
-	}
+      
+      var aryD = randomArrayMB(len)
+      val startD = System.nanoTime
+      mergeSortMB(aryD, (a: Int, b: Int) => a < b)
+      println("Array[@miniboxed T] : " + (System.nanoTime - startD) / 1000000.0 + " milliseconds")
+    }
   }
 }

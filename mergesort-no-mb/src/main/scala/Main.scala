@@ -6,29 +6,29 @@ object MergeSort {
 
   def mergeSortFast(ary: Array[Int], comp: (Int, Int) => Boolean): Array[Int] = {
     def merge(a: Array[Int], b: Array[Int]): Array[Int] = {
-	  val res = new Array[Int](a.length + b.length)
-	  var ai = 0
-	  var bi = 0
-	  while (ai < a.length && bi < b.length) {
-	    if (comp(a(ai), b(bi))) {
-		  res(ai + bi) = a(ai)
-		  ai += 1
-	    } else {
-		  res(ai + bi) = b(bi)
-	  	  bi += 1
-	    }
-	  }
-	  while (ai < a.length) {
-	    res(ai + bi) = a(ai)
-	    ai += 1
-	  }
-	  while (bi < b.length) {
-	    res(ai + bi) = b(bi)
-	    bi += 1
-	  }
-	  res
+      val res = new Array[Int](a.length + b.length)
+      var ai = 0
+      var bi = 0
+      while (ai < a.length && bi < b.length) {
+        if (comp(a(ai), b(bi))) {
+          res(ai + bi) = a(ai)
+          ai += 1
+        } else {
+          res(ai + bi) = b(bi)
+            bi += 1
+        }
+      }
+      while (ai < a.length) {
+        res(ai + bi) = a(ai)
+        ai += 1
+      }
+      while (bi < b.length) {
+        res(ai + bi) = b(bi)
+        bi += 1
+      }
+      res
     }
-	
+    
     val len = ary.length
     if (len <= 1) ary
     else {
