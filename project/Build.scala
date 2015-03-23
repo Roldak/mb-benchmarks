@@ -6,13 +6,13 @@ object MyBuild extends Build {
   scalaVersion in ThisBuild := "2.11.5"
   
   lazy val defaultSettings = Defaults.defaultSettings ++ Seq[Setting[_]](
-      organization := "ch.epfl.lamp",
-      version := "0.1-SNAPSHOT",
-      // The plugin requires the latest version of the scalac compiler. You
-      // can use older compilers, but before reporting a bug, please check
-      // that it can be reproduced with the latest version of the compiler.
-      scalaVersion := "2.11.5"
-    )
+    organization := "ch.epfl.lamp",
+    version := "0.1-SNAPSHOT",
+    // The plugin requires the latest version of the scalac compiler. You
+    // can use older compilers, but before reporting a bug, please check
+    // that it can be reproduced with the latest version of the compiler.
+    scalaVersion := "2.11.5"
+  )
 
   lazy val root = project.in(file(".")).aggregate(mbarrays)
   
@@ -31,6 +31,18 @@ object MyBuild extends Build {
   lazy val mergesortmb = Project(
 	"mergesort-mb",
 	file("mergesort-mb"),
+	settings = defaultSettings ++ miniboxingSettings
+  )
+  
+  lazy val mergesortcompnomb = Project(
+	"mergesort-comp-no-mb",
+	file("mergesort-comp-no-mb"),
+	settings = defaultSettings
+  )
+  
+  lazy val mergesortcompmb = Project(
+	"mergesort-comp-mb",
+	file("mergesort-comp-mb"),
 	settings = defaultSettings ++ miniboxingSettings
   )
   
