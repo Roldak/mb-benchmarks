@@ -14,7 +14,7 @@ class IntComparator extends Comparator[Int] {
 object MergeSort { 
   final val seed = 42
   
-  def mergeSort[T](ary: Array[T], comp: Comparator[T]): Array[T] = {
+  def mergeSortFast[T](ary: Array[T], comp: Comparator[T]): Array[T] = {
     def merge(a: Array[T], b: Array[T]): Array[T] = {
 	  val res = new Array[Any](a.length + b.length).asInstanceOf[Array[T]]
 	  var ai = 0
@@ -48,8 +48,84 @@ object MergeSort {
 	  for (i <- 0 until mid) a(i) = ary(i)
 	  for (i <- mid until len) b(i - mid) = ary(i)
 	  
-	  merge(mergeSort(a, comp), mergeSort(b, comp))
+	  merge(mergeSortFast(a, comp), mergeSortFast(b, comp))
 	}
+  }
+  
+  def mergeSortGen[T](ary: Array[T], comp: Comparator[T]): Array[T] = {
+    def merge(a: Array[T], b: Array[T]): Array[T] = {
+      val res = new Array[Any](a.length + b.length)
+      var ai = 0
+      var bi = 0
+      while (ai < a.length && bi < b.length) {
+        if (comp(a(ai), b(bi))) {
+          res(ai + bi) = a(ai)
+          ai += 1
+        } else {
+          res(ai + bi) = b(bi)
+          bi += 1
+        }
+      }
+      while (ai < a.length) {
+        res(ai + bi) = a(ai)
+        ai += 1
+      }
+      while (bi < b.length) {
+        res(ai + bi) = b(bi)
+        bi += 1
+      }
+      res.asInstanceOf[Array[T]]
+    }
+    val len = ary.length
+    if (len <= 1) ary
+    else {
+      val mid = len / 2
+      val a = new Array[Any](mid)
+      val b = new Array[Any](len - mid)
+
+      for (i <- 0 until mid) a(i) = ary(i)
+      for (i <- mid until len) b(i - mid) = ary(i)
+
+      merge(mergeSortGen(a.asInstanceOf[Array[T]], comp), mergeSortGen(b.asInstanceOf[Array[T]], comp))
+    }
+  }
+
+  def mergeSortCT[T: ClassTag](ary: Array[T], comp: Comparator[T]): Array[T] = {
+    def merge(a: Array[T], b: Array[T]): Array[T] = {
+      val res = new Array[T](a.length + b.length)
+      var ai = 0
+      var bi = 0
+      while (ai < a.length && bi < b.length) {
+        if (comp(a(ai), b(bi))) {
+          res(ai + bi) = a(ai)
+          ai += 1
+        } else {
+          res(ai + bi) = b(bi)
+          bi += 1
+        }
+      }
+      while (ai < a.length) {
+        res(ai + bi) = a(ai)
+        ai += 1
+      }
+      while (bi < b.length) {
+        res(ai + bi) = b(bi)
+        bi += 1
+      }
+      res
+    }
+    val len = ary.length
+    if (len <= 1) ary
+    else {
+      val mid = len / 2
+      val a = new Array[T](mid)
+      val b = new Array[T](len - mid)
+
+      for (i <- 0 until mid) a(i) = ary(i)
+      for (i <- mid until len) b(i - mid) = ary(i)
+
+      merge(mergeSortCT(a, comp), mergeSortCT(b, comp))
+    }
   }
   
   def randomArray(len: Int) = {
@@ -67,10 +143,20 @@ object MergeSort {
 	for (len <- lens) {
 	  println("\nWith length : " + len + "\n")
 	  
-	  var aryD = randomArray(len)
-	  val startD = System.nanoTime
-	  mergeSort(aryD, new IntComparator)
-	  println("Array[@miniboxed T] : " + (System.nanoTime - startD) / 1000000.0 + " milliseconds")
+	  val aryA = randomArray(len)
+      val startA = System.nanoTime
+      mergeSortFast(aryA, new IntComparator)
+      println("Array[Int] : " + (System.nanoTime - startA) / 1000000.0 + " milliseconds")
+
+      val aryB = randomArray(len)
+      val startB = System.nanoTime
+      mergeSortGen(aryB, new IntComparator)
+      println("Array[Any] : " + (System.nanoTime - startB) / 1000000.0 + " milliseconds")
+
+      val aryC = randomArray(len)
+      val startC = System.nanoTime
+      mergeSortCT(aryC, new IntComparator)
+      println("Array[T: ClassTag] : " + (System.nanoTime - startC) / 1000000.0 + " milliseconds")
 	}
   }
 }
