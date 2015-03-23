@@ -4,14 +4,6 @@ import MbArray._
 import scala.reflect._
 import scala.util._
 
-trait Comparator[@miniboxed T] {
-	def apply(a: T, b: T): Boolean
-}
-
-class IntComparator extends Comparator[Int] {
-	override def apply(a: Int, b: Int): Boolean = a < b
-}
-
 object MergeSort { 
   final val seed = 42
   
@@ -139,7 +131,7 @@ object MergeSort {
     ary
   }
   
-  def mergeSortMB[@miniboxed T](ary: MbArray[T], comp: Comparator[T]): MbArray[T] = {
+  def mergeSortMB[@miniboxed T](ary: MbArray[T], comp: (T, T) => Boolean): MbArray[T] = {
     def merge(a: MbArray[T], b: MbArray[T]): MbArray[T] = {
 	  val res = MbArray.empty[T](a.length + b.length)
 	  var ai = 0
@@ -208,7 +200,7 @@ object MergeSort {
 	  
 	  var aryD = randomArrayMB(len)
 	  val startD = System.nanoTime
-	  mergeSortMB(aryD, new IntComparator)
+	  mergeSortMB(aryD, (a: Int, b: Int) => a < b)
 	  println("Array[@miniboxed T] : " + (System.nanoTime - startD) / 1000000.0 + " milliseconds")
 	}
   }
