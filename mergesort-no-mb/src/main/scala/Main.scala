@@ -1,0 +1,153 @@
+import scala.reflect._
+import scala.util._
+
+object MergeSort {
+  final val seed = 42
+
+  def mergeSortFast(ary: Array[Int], comp: (Int, Int) => Boolean): Array[Int] = {
+    val len = ary.length
+    if (len <= 1) ary
+    else {
+      val mid = len / 2
+      val a = new Array[Int](mid)
+      val b = new Array[Int](len - mid)
+
+      for (i <- 0 until mid) a(i) = ary(i)
+      for (i <- mid until len) b(i - mid) = ary(i)
+
+      mergeFast(mergeSortFast(a, comp), mergeSortFast(b, comp), comp)
+    }
+  }
+
+  def mergeFast(a: Array[Int], b: Array[Int], comp: (Int, Int) => Boolean): Array[Int] = {
+    val res = new Array[Int](a.length + b.length)
+    var ai = 0
+    var bi = 0
+    while (ai < a.length && bi < b.length) {
+      if (comp(a(ai), b(bi))) {
+        res(ai + bi) = a(ai)
+        ai += 1
+      } else {
+        res(ai + bi) = b(bi)
+        bi += 1
+      }
+    }
+    while (ai < a.length) {
+      res(ai + bi) = a(ai)
+      ai += 1
+    }
+    while (bi < b.length) {
+      res(ai + bi) = b(bi)
+      bi += 1
+    }
+    res
+  }
+
+  def mergeSortGen[T](ary: Array[T], comp: (T, T) => Boolean): Array[T] = {
+    val len = ary.length
+    if (len <= 1) ary
+    else {
+      val mid = len / 2
+      val a = new Array[Any](mid)
+      val b = new Array[Any](len - mid)
+
+      for (i <- 0 until mid) a(i) = ary(i)
+      for (i <- mid until len) b(i - mid) = ary(i)
+
+      mergeGen(mergeSortGen(a.asInstanceOf[Array[T]], comp), mergeSortGen(b.asInstanceOf[Array[T]], comp), comp)
+    }
+  }
+
+  def mergeGen[T](a: Array[T], b: Array[T], comp: (T, T) => Boolean): Array[T] = {
+    val res = new Array[Any](a.length + b.length)
+    var ai = 0
+    var bi = 0
+    while (ai < a.length && bi < b.length) {
+      if (comp(a(ai), b(bi))) {
+        res(ai + bi) = a(ai)
+        ai += 1
+      } else {
+        res(ai + bi) = b(bi)
+        bi += 1
+      }
+    }
+    while (ai < a.length) {
+      res(ai + bi) = a(ai)
+      ai += 1
+    }
+    while (bi < b.length) {
+      res(ai + bi) = b(bi)
+      bi += 1
+    }
+    res.asInstanceOf[Array[T]]
+  }
+
+  def mergeSortCT[T: ClassTag](ary: Array[T], comp: (T, T) => Boolean): Array[T] = {
+    def merge(a: Array[T], b: Array[T]): Array[T] = {
+      val res = new Array[T](a.length + b.length)
+      var ai = 0
+      var bi = 0
+      while (ai < a.length && bi < b.length) {
+        if (comp(a(ai), b(bi))) {
+          res(ai + bi) = a(ai)
+          ai += 1
+        } else {
+          res(ai + bi) = b(bi)
+          bi += 1
+        }
+      }
+      while (ai < a.length) {
+        res(ai + bi) = a(ai)
+        ai += 1
+      }
+      while (bi < b.length) {
+        res(ai + bi) = b(bi)
+        bi += 1
+      }
+      res
+    }
+    val len = ary.length
+    if (len <= 1) ary
+    else {
+      val mid = len / 2
+      val a = new Array[T](mid)
+      val b = new Array[T](len - mid)
+
+      for (i <- 0 until mid) a(i) = ary(i)
+      for (i <- mid until len) b(i - mid) = ary(i)
+
+      merge(mergeSortCT(a, comp), mergeSortCT(b, comp))
+    }
+  }
+
+  def randomArray(len: Int) = {
+    val ary = new Array[Int](len)
+    val rnd = new Random(seed)
+    for (i <- 0 until len) {
+      ary(i) = rnd.nextInt(len)
+    }
+    ary
+  }
+
+  def main(args: Array[String]): Unit = {
+    val lens = List(500000, 1000000, 3000000)
+
+    for (len <- lens) {
+      println("\nWith length : " + len + "\n")
+      val aryA = randomArray(len)
+      val startA = System.nanoTime
+      mergeSortFast(aryA, (a: Int, b: Int) => a < b)
+      println("Array[Int] : " + (System.nanoTime - startA) / 1000000.0 + " milliseconds")
+
+      val aryB = randomArray(len)
+      val startB = System.nanoTime
+      mergeSortGen(aryB, (a: Int, b: Int) => a < b)
+      println("Array[Any] : " + (System.nanoTime - startB) / 1000000.0 + " milliseconds")
+
+      val aryC = randomArray(len)
+      val startC = System.nanoTime
+      mergeSortCT(aryC, (a: Int, b: Int) => a < b)
+      println("Array[T: ClassTag] : " + (System.nanoTime - startC) / 1000000.0 + " milliseconds")
+    }
+  }
+}

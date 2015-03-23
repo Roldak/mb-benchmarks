@@ -4,20 +4,34 @@ import Keys._
 object MyBuild extends Build {
 
   scalaVersion in ThisBuild := "2.11.5"
-
-  lazy val root = project.in(file(".")).aggregate(mbarrays)
   
-  lazy val mbarrays = Project(
-	"mbarrays",
-	file("mbarrays"),
-    settings = Defaults.defaultSettings ++ Seq[Setting[_]](
+  lazy val defaultSettings = Defaults.defaultSettings ++ Seq[Setting[_]](
       organization := "ch.epfl.lamp",
       version := "0.1-SNAPSHOT",
       // The plugin requires the latest version of the scalac compiler. You
       // can use older compilers, but before reporting a bug, please check
       // that it can be reproduced with the latest version of the compiler.
       scalaVersion := "2.11.5"
-    ) ++ miniboxingSettings
+    )
+
+  lazy val root = project.in(file(".")).aggregate(mbarrays)
+  
+  lazy val mbarrays = Project(
+	"mbarrays",
+	file("mbarrays"),
+    settings = defaultSettings ++ miniboxingSettings
+  )
+  
+  lazy val mergesortnomb = Project(
+	"mergesort-no-mb",
+	file("mergesort-no-mb"),
+	settings = defaultSettings
+  )
+  
+  lazy val mergesortmb = Project(
+	"mergesort-mb",
+	file("mergesort-mb"),
+	settings = defaultSettings ++ miniboxingSettings
   )
   
   libraryDependencies += "org.scala-lang" % "scala-reflect" % scalaVersion.value
