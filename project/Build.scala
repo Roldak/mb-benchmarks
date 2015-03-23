@@ -5,11 +5,11 @@ object MyBuild extends Build {
 
   scalaVersion in ThisBuild := "2.11.5"
 
-  lazy val root = project.in(file(".")).aggregate(mbarray)
+  lazy val root = project.in(file(".")).aggregate(mbarrays)
   
-  lazy val mbarray = Project(
-	"mbarray",
-	file("mbarray"),
+  lazy val mbarrays = Project(
+	"mbarrays",
+	file("mbarrays"),
     settings = Defaults.defaultSettings ++ Seq[Setting[_]](
       organization := "ch.epfl.lamp",
       version := "0.1-SNAPSHOT",

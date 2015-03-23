@@ -24,7 +24,7 @@ object Test {
   def main(args: Array[String]): Unit = {
     val a = new Array[Any](len)
     val b = MbArray.empty[Int](len)
-   
+    
     println(a.getClass())
     for (i <- 0 until 30) {
         val startA = System.nanoTime
