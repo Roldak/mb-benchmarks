@@ -5,6 +5,30 @@ object MergeSort {
   final val seed = 42
 
   def mergeSortFast(ary: Array[Int], comp: (Int, Int) => Boolean): Array[Int] = {
+    def merge(a: Array[Int], b: Array[Int]): Array[Int] = {
+	  val res = new Array[Int](a.length + b.length)
+	  var ai = 0
+	  var bi = 0
+	  while (ai < a.length && bi < b.length) {
+	    if (comp(a(ai), b(bi))) {
+		  res(ai + bi) = a(ai)
+		  ai += 1
+	    } else {
+		  res(ai + bi) = b(bi)
+	  	  bi += 1
+	    }
+	  }
+	  while (ai < a.length) {
+	    res(ai + bi) = a(ai)
+	    ai += 1
+	  }
+	  while (bi < b.length) {
+	    res(ai + bi) = b(bi)
+	    bi += 1
+	  }
+	  res
+    }
+	
     val len = ary.length
     if (len <= 1) ary
     else {
@@ -15,35 +39,34 @@ object MergeSort {
       for (i <- 0 until mid) a(i) = ary(i)
       for (i <- mid until len) b(i - mid) = ary(i)
 
-      mergeFast(mergeSortFast(a, comp), mergeSortFast(b, comp), comp)
+      merge(mergeSortFast(a, comp), mergeSortFast(b, comp))
     }
-  }
-
-  def mergeFast(a: Array[Int], b: Array[Int], comp: (Int, Int) => Boolean): Array[Int] = {
-    val res = new Array[Int](a.length + b.length)
-    var ai = 0
-    var bi = 0
-    while (ai < a.length && bi < b.length) {
-      if (comp(a(ai), b(bi))) {
-        res(ai + bi) = a(ai)
-        ai += 1
-      } else {
-        res(ai + bi) = b(bi)
-        bi += 1
-      }
-    }
-    while (ai < a.length) {
-      res(ai + bi) = a(ai)
-      ai += 1
-    }
-    while (bi < b.length) {
-      res(ai + bi) = b(bi)
-      bi += 1
-    }
-    res
   }
 
   def mergeSortGen[T](ary: Array[T], comp: (T, T) => Boolean): Array[T] = {
+    def merge(a: Array[T], b: Array[T]): Array[T] = {
+      val res = new Array[Any](a.length + b.length)
+      var ai = 0
+      var bi = 0
+      while (ai < a.length && bi < b.length) {
+        if (comp(a(ai), b(bi))) {
+          res(ai + bi) = a(ai)
+          ai += 1
+        } else {
+          res(ai + bi) = b(bi)
+          bi += 1
+        }
+      }
+      while (ai < a.length) {
+        res(ai + bi) = a(ai)
+        ai += 1
+      }
+      while (bi < b.length) {
+        res(ai + bi) = b(bi)
+        bi += 1
+      }
+      res.asInstanceOf[Array[T]]
+    }
     val len = ary.length
     if (len <= 1) ary
     else {
@@ -54,32 +77,8 @@ object MergeSort {
       for (i <- 0 until mid) a(i) = ary(i)
       for (i <- mid until len) b(i - mid) = ary(i)
 
-      mergeGen(mergeSortGen(a.asInstanceOf[Array[T]], comp), mergeSortGen(b.asInstanceOf[Array[T]], comp), comp)
+      merge(mergeSortGen(a.asInstanceOf[Array[T]], comp), mergeSortGen(b.asInstanceOf[Array[T]], comp))
     }
-  }
-
-  def mergeGen[T](a: Array[T], b: Array[T], comp: (T, T) => Boolean): Array[T] = {
-    val res = new Array[Any](a.length + b.length)
-    var ai = 0
-    var bi = 0
-    while (ai < a.length && bi < b.length) {
-      if (comp(a(ai), b(bi))) {
-        res(ai + bi) = a(ai)
-        ai += 1
-      } else {
-        res(ai + bi) = b(bi)
-        bi += 1
-      }
-    }
-    while (ai < a.length) {
-      res(ai + bi) = a(ai)
-      ai += 1
-    }
-    while (bi < b.length) {
-      res(ai + bi) = b(bi)
-      bi += 1
-    }
-    res.asInstanceOf[Array[T]]
   }
 
   def mergeSortCT[T: ClassTag](ary: Array[T], comp: (T, T) => Boolean): Array[T] = {
