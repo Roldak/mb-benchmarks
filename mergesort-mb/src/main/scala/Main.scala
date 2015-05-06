@@ -183,15 +183,15 @@ object MergeSort {
       val a = MbArray.empty[T](mid)
       val b = MbArray.empty[T](len - mid)
       
-	  var i = 0
-	  while (i < mid) {
-	    a(i) = ary(i)
-	    i += 1
-	  }
-	  while (i < len) {
-	    b(i - mid) = ary(i)
-		i += 1
-	  }
+      var i = 0
+      while (i < mid) {
+        a(i) = ary(i)
+        i += 1
+      }
+      while (i < len) {
+        b(i - mid) = ary(i)
+        i += 1
+      }
       
       merge(mergeSortMB(a, comp), mergeSortMB(b, comp))
     }

@@ -127,14 +127,14 @@ object MergeSort {
       val b = new Array[T](len - mid)
 
       var i = 0
-	  while (i < mid) {
-	    a(i) = ary(i)
-	    i += 1
-	  }
-	  while (i < len) {
-	    b(i - mid) = ary(i)
-		i += 1
-	  }
+      while (i < mid) {
+        a(i) = ary(i)
+        i += 1
+      }
+      while (i < len) {
+        b(i - mid) = ary(i)
+        i += 1
+      }
 
       merge(mergeSortCT(a, comp), mergeSortCT(b, comp))
     }
