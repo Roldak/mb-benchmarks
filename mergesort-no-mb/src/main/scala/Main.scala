@@ -36,8 +36,15 @@ object MergeSort {
       val a = new Array[Int](mid)
       val b = new Array[Int](len - mid)
 
-      for (i <- 0 until mid) a(i) = ary(i)
-      for (i <- mid until len) b(i - mid) = ary(i)
+      var i = 0
+	  while (i < mid) {
+	    a(i) = ary(i)
+	    i += 1
+	  }
+	  while (i < len) {
+	    b(i - mid) = ary(i)
+		i += 1
+	  }
 
       merge(mergeSortFast(a, comp), mergeSortFast(b, comp))
     }
@@ -74,8 +81,15 @@ object MergeSort {
       val a = new Array[Any](mid)
       val b = new Array[Any](len - mid)
 
-      for (i <- 0 until mid) a(i) = ary(i)
-      for (i <- mid until len) b(i - mid) = ary(i)
+      var i = 0
+	  while (i < mid) {
+	    a(i) = ary(i)
+	    i += 1
+	  }
+	  while (i < len) {
+	    b(i - mid) = ary(i)
+		i += 1
+	  }
 
       merge(mergeSortGen(a.asInstanceOf[Array[T]], comp), mergeSortGen(b.asInstanceOf[Array[T]], comp))
     }
@@ -112,8 +126,15 @@ object MergeSort {
       val a = new Array[T](mid)
       val b = new Array[T](len - mid)
 
-      for (i <- 0 until mid) a(i) = ary(i)
-      for (i <- mid until len) b(i - mid) = ary(i)
+      var i = 0
+	  while (i < mid) {
+	    a(i) = ary(i)
+	    i += 1
+	  }
+	  while (i < len) {
+	    b(i - mid) = ary(i)
+		i += 1
+	  }
 
       merge(mergeSortCT(a, comp), mergeSortCT(b, comp))
     }
