@@ -154,17 +154,23 @@ object MergeSort {
 
     for (len <- lens) {
       println("\nWith length : " + len + "\n")
-      val aryA = randomArray(len)
+      var aryA = randomArray(len)
       val startA = System.nanoTime
       mergeSortFast(aryA, (a: Int, b: Int) => a < b)
       println("Array[Int] : " + (System.nanoTime - startA) / 1000000.0 + " milliseconds")
 
-      val aryB = randomArray(len)
+	  aryA = null
+	  System.gc()
+	  
+      var aryB = randomArray(len)
       val startB = System.nanoTime
       mergeSortGen(aryB, (a: Int, b: Int) => a < b)
       println("Array[Any] : " + (System.nanoTime - startB) / 1000000.0 + " milliseconds")
 
-      val aryC = randomArray(len)
+	  aryB = null
+	  System.gc()
+	  
+      var aryC = randomArray(len)
       val startC = System.nanoTime
       mergeSortCT(aryC, (a: Int, b: Int) => a < b)
       println("Array[T: ClassTag] : " + (System.nanoTime - startC) / 1000000.0 + " milliseconds")

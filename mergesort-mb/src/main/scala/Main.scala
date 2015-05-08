@@ -98,7 +98,7 @@ object MergeSort {
     }
   }
 
-  def mergeSortCT[T: ClassTag](ary: Array[T], comp: (T, T) => Boolean): Array[T] = {
+  def mergeSortCT[@miniboxed T: ClassTag](ary: Array[T], comp: (T, T) => Boolean): Array[T] = {
     def merge(a: Array[T], b: Array[T]): Array[T] = {
       val res = new Array[T](a.length + b.length)
       var ai = 0
@@ -211,21 +211,30 @@ object MergeSort {
     
     for (len <- lens) {
       println("\nWith length : " + len + "\n")
-      val aryA = randomArray(len)
+      var aryA = randomArray(len)
       val startA = System.nanoTime
       mergeSortFast(aryA, (a: Int, b: Int) => a < b)
       println("Array[Int] : " + (System.nanoTime - startA) / 1000000.0 + " milliseconds")
+	  
+	  aryA = null
+	  System.gc()
 
-      val aryB = randomArray(len)
+      var aryB = randomArray(len)
       val startB = System.nanoTime
       mergeSortGen(aryB, (a: Int, b: Int) => a < b)
       println("Array[Any] : " + (System.nanoTime - startB) / 1000000.0 + " milliseconds")
 
-      val aryC = randomArray(len)
+	  aryB = null
+	  System.gc()
+	  
+      var aryC = randomArray(len)
       val startC = System.nanoTime
       mergeSortCT(aryC, (a: Int, b: Int) => a < b)
       println("Array[T: ClassTag] : " + (System.nanoTime - startC) / 1000000.0 + " milliseconds")
       
+	  aryC = null
+	  System.gc()
+	  
       var aryD = randomArrayMB(len)
       val startD = System.nanoTime
       mergeSortMB(aryD, (a: Int, b: Int) => a < b)
